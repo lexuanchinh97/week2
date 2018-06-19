@@ -1,3 +1,7 @@
 <resources>
     <string name="app_name">NewsArticleSearch</string>
+    <string-array name="SortFilter">
+        <item>older</item>
+        <item>newer</item>
+    </string-array>
 </resources>
