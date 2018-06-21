@@ -1,9 +1,7 @@
-package com.example.lexuanchinh.newsarticlesearch;
+package com.example.lexuanchinh.newsarticlesearch.articlesearch.view;
 
 import android.app.DatePickerDialog;
 import android.content.Intent;
-import android.support.annotation.NonNull;
-import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
@@ -15,37 +13,40 @@ import android.widget.DatePicker;
 import android.widget.Toast;
 
 import com.example.lexuanchinh.newsarticlesearch.Adapter.AdapterListSearch;
+import com.example.lexuanchinh.newsarticlesearch.R;
+import com.example.lexuanchinh.newsarticlesearch.articlesearch.model.ArticleSearchData;
+import com.example.lexuanchinh.newsarticlesearch.articlesearch.model.ArticleSearchDataImpl;
+import com.example.lexuanchinh.newsarticlesearch.articlesearch.presenter.ListArtSearchPresenter;
+import com.example.lexuanchinh.newsarticlesearch.articlesearch.presenter.ListArtSearchPresenterImpl;
 import com.example.lexuanchinh.newsarticlesearch.model.Doc;
-import com.example.lexuanchinh.newsarticlesearch.model.ListSearch;
-import com.example.lexuanchinh.newsarticlesearch.util.APIService;
 
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
 
-public class MainActivity extends AppCompatActivity implements DatePickerDialog.OnDateSetListener {
-    ListSearch listSearch;
+public class MainActivity extends AppCompatActivity implements DatePickerDialog.OnDateSetListener,ListArtSearchView  {
     List<Doc> docList;
     RecyclerView recyclerView;
     AdapterListSearch adapter;
-    public static int page=1;
+    ListArtSearchPresenter presenter;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         recyclerView=findViewById(R.id.recyclerview);
 
-           if(docList==null)
-           {
-               setUpListView();
-               callAPI();
-           }else {
-               adapter.setData(docList);
-           }
+//           if(docList==null)
+//           {
+//               setUpListView();
+//              // callAPI();
+//           }else {
+//               adapter.setData(docList);
+//           }
+        setUpListView();
+        ArticleSearchData searchData=new ArticleSearchDataImpl();
+           presenter=new ListArtSearchPresenterImpl(this,searchData);
+           presenter.getDocs();
     }
 
     @Override
@@ -71,26 +72,26 @@ public class MainActivity extends AppCompatActivity implements DatePickerDialog.
         }
         return super.onOptionsItemSelected(item);
     }
-    private void callAPI() {
-        //    progressBar.setVisibility(View.VISIBLE);
-        APIService.getInstance().getArticlesearch("20170112","newest","news_desk:( Sports)",APIService.API_KEY,page++).enqueue(new Callback<ListSearch>() {
-            @Override
-            public void onResponse(Call<ListSearch> call, Response<ListSearch> response) {
-                if(response.body()!=null){
-                    listSearch=response.body();
-                    docList=listSearch.getResponse().getDocs();
-                    adapter.setData(docList);
-                    //  Toast.makeText(MainActivity.this, response.body().getCopyright(), Toast.LENGTH_SHORT).show();
-                }
-            }
-            @Override
-            public void onFailure(Call<ListSearch> call, Throwable t) {
-
-            }
-        });
-
-
-    }
+//    private void callAPI() {
+//        //    progressBar.setVisibility(View.VISIBLE);
+//        APIService.getInstance().getArticlesearch("20170112","newest","news_desk:( Sports)",APIService.API_KEY,page++).enqueue(new Callback<ListSearch>() {
+//            @Override
+//            public void onResponse(Call<ListSearch> call, Response<ListSearch> response) {
+//                if(response.body()!=null){
+//                    listSearch=response.body();
+//                    docList=listSearch.getResponse().getDocs();
+//                    adapter.setData(docList);
+//                    //  Toast.makeText(MainActivity.this, response.body().getCopyright(), Toast.LENGTH_SHORT).show();
+//                }
+//            }
+//            @Override
+//            public void onFailure(Call<ListSearch> call, Throwable t) {
+//
+//            }
+//        });
+//
+//
+//    }
 
 
     @Override
@@ -111,7 +112,16 @@ public class MainActivity extends AppCompatActivity implements DatePickerDialog.
         adapter = new AdapterListSearch(MainActivity.this);
         adapter.setData(docList);
         this.recyclerView.setAdapter(adapter);
-        this.recyclerView.setLayoutManager(new StaggeredGridLayoutManager(3,StaggeredGridLayoutManager.VERTICAL));
+        this.recyclerView.setLayoutManager(new StaggeredGridLayoutManager(2,StaggeredGridLayoutManager.VERTICAL));
         //this.recyclerView.addOnScrollListener(n);
+    }
+
+    @Override
+    public void showLoading() {
+    }
+
+    @Override
+    public void showListMovies(List<Doc> docs) {
+            adapter.setData(docs);
     }
 }

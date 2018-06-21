@@ -43,13 +43,12 @@ public class AdapterListSearch extends RecyclerView.Adapter<AdapterListSearch.Vi
         if(doc!=null){
             viewHolder.txtMain.setText( doc.getHeadline().getMain());
             if(doc.getMultimedia().size()>0){
-                Log.d("abc",APIService.BASE_URL+doc.getMultimedia().get(0).getUrl());
+            //    Log.d("abc",APIService.BASE_URL+doc.getMultimedia().get(0).getUrl());
                 Glide.with(context).load(APIService.BASE_IMAGE+doc.getMultimedia().get(0).getUrl())
                         .into(viewHolder.thumb_image);
             }
 
         }
-
     }
 
     @Override
