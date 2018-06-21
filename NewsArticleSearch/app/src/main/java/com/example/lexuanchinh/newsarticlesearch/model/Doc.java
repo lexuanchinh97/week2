@@ -6,6 +6,9 @@ import com.google.gson.annotations.SerializedName;
 import java.util.List;
 
 public class Doc {
+    @SerializedName("byline")
+    @Expose
+    private Byline byline;
     @SerializedName("web_url")
     @Expose
     private String webUrl;
@@ -43,9 +46,6 @@ public class Doc {
     @SerializedName("word_count")
     @Expose
     private Integer wordCount;
-    @SerializedName("score")
-    @Expose
-    private Integer score;
     @SerializedName("section_name")
     @Expose
     private String sectionName;
@@ -149,13 +149,6 @@ public class Doc {
         this.wordCount = wordCount;
     }
 
-    public Integer getScore() {
-        return score;
-    }
-
-    public void setScore(Integer score) {
-        this.score = score;
-    }
 
     public String getSectionName() {
         return sectionName;
@@ -163,6 +156,13 @@ public class Doc {
 
     public void setSectionName(String sectionName) {
         this.sectionName = sectionName;
+    }
+    public Byline getByline() {
+        return byline;
+    }
+
+    public void setByline(Byline byline) {
+        this.byline = byline;
     }
 
 }

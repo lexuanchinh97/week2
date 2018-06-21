@@ -17,7 +17,7 @@ public interface APIInterface {
                                      @Query("page") int PAGE);
     @GET("svc/search/v2/articlesearch.json")
     Call<ListSearch>getArticlesearchQ(
-            @Query("p") String Q,
+            @Query("q") String Q,
           //  @Query("begin_day") String BEGIN_DAY,
          //   @Query("fq") String NEWS_DESK,
             @Query("api-key") String API_KEY);

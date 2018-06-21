@@ -16,7 +16,6 @@ import retrofit2.Response;
 public class ArticleSearchDataImpl implements ArticleSearchData {
     ListSearch listSearch;
     List<Doc> docList;
-    AdapterListSearch adapter;
     public static int page=1;
     public static String beginDay="20170112";
     public static String sort="newest";
@@ -57,7 +56,7 @@ public class ArticleSearchDataImpl implements ArticleSearchData {
 
             @Override
             public void onFailure(Call<ListSearch> call, Throwable t) {
-
+                Log.d("aaa","chinh");
             }
         });
     }
