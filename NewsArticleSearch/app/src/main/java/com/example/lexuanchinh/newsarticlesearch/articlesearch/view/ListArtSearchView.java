@@ -6,5 +6,5 @@ import java.util.List;
 
 public interface ListArtSearchView {
     void showLoading();
-    void showListMovies(List<Doc> docs);
+    void showListArtSearch(List<Doc> docs);
 }

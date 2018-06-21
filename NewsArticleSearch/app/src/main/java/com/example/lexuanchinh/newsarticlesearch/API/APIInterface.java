@@ -11,9 +11,14 @@ import retrofit2.http.Query;
 public interface APIInterface {
     @GET("svc/search/v2/articlesearch.json")
     Call<ListSearch>getArticlesearch(
-                                     @Query(("begin_day")) String BEGIN_DAY,
+                                     @Query("begin_day") String BEGIN_DAY,
                                      @Query("sort") String SORT ,
-                                     @Query(("new_desk")) String NEWS_DESK,
                                      @Query("api-key") String API_KEY,
                                      @Query("page") int PAGE);
+    @GET("svc/search/v2/articlesearch.json")
+    Call<ListSearch>getArticlesearchQ(
+            @Query("p") String Q,
+          //  @Query("begin_day") String BEGIN_DAY,
+         //   @Query("fq") String NEWS_DESK,
+            @Query("api-key") String API_KEY);
 }

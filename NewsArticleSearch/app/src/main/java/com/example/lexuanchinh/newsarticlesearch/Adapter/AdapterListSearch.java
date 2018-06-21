@@ -47,7 +47,10 @@ public class AdapterListSearch extends RecyclerView.Adapter<AdapterListSearch.Vi
                 Glide.with(context).load(APIService.BASE_IMAGE+doc.getMultimedia().get(0).getUrl())
                         .into(viewHolder.thumb_image);
             }
-
+            else{
+                Glide.with(context).load("https://images-na.ssl-images-amazon.com/images/I/51lbBitzv-L._SX342_QL70_.jpg")
+                        .into(viewHolder.thumb_image);
+            }
         }
     }
 

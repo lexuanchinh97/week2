@@ -2,10 +2,12 @@ package com.example.lexuanchinh.newsarticlesearch.articlesearch.view;
 
 import android.app.DatePickerDialog;
 import android.content.Intent;
+import android.support.v4.view.MenuItemCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.SearchView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -19,10 +21,16 @@ import com.example.lexuanchinh.newsarticlesearch.articlesearch.model.ArticleSear
 import com.example.lexuanchinh.newsarticlesearch.articlesearch.presenter.ListArtSearchPresenter;
 import com.example.lexuanchinh.newsarticlesearch.articlesearch.presenter.ListArtSearchPresenterImpl;
 import com.example.lexuanchinh.newsarticlesearch.model.Doc;
+import com.example.lexuanchinh.newsarticlesearch.util.APIService;
 
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
+
+import static com.example.lexuanchinh.newsarticlesearch.articlesearch.model.ArticleSearchDataImpl.beginDay;
+import static com.example.lexuanchinh.newsarticlesearch.articlesearch.model.ArticleSearchDataImpl.newsDesk;
+import static com.example.lexuanchinh.newsarticlesearch.articlesearch.model.ArticleSearchDataImpl.page;
+import static com.example.lexuanchinh.newsarticlesearch.articlesearch.model.ArticleSearchDataImpl.sort;
 
 
 public class MainActivity extends AppCompatActivity implements DatePickerDialog.OnDateSetListener,ListArtSearchView  {
@@ -52,12 +60,30 @@ public class MainActivity extends AppCompatActivity implements DatePickerDialog.
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu_main,menu);
+        MenuItem searchItem=menu.findItem(R.id.action_search);
+        final SearchView searchView= (SearchView) MenuItemCompat.getActionView(searchItem);
+        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String s) {
+                Toast.makeText(MainActivity.this, s, Toast.LENGTH_SHORT).show();
+                presenter.getSearch(s);
+                return  true;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String s) {
+                return false;
+            }
+        });
         return super.onCreateOptionsMenu(menu);
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()){
+            case R.id.action_search:
+
+            break;
             case R.id.filter:
                 Intent intent=new Intent(MainActivity.this,FilterActivity.class);
                 startActivity(intent);
@@ -121,7 +147,7 @@ public class MainActivity extends AppCompatActivity implements DatePickerDialog.
     }
 
     @Override
-    public void showListMovies(List<Doc> docs) {
+    public void showListArtSearch(List<Doc> docs) {
             adapter.setData(docs);
     }
 }

@@ -15,12 +15,18 @@ public class ListArtSearchPresenterImpl implements ListArtSearchPresenter,DataLi
     }
     @Override
     public void onResponse(List<Doc> docs) {
-        mView.showListMovies(docs);
+        mView.showListArtSearch(docs);
     }
 
     @Override
     public void getDocs() {
         mView.showLoading();
         articleSearchData.getDataFormNetwork(this);
+    }
+
+    @Override
+    public void getSearch(String query) {
+        mView.showLoading();
+        articleSearchData.getDataSearchFromNetwork(this,query);
     }
 }
