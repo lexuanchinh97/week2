@@ -10,7 +10,8 @@ import retrofit2.converter.gson.GsonConverterFactory;
 
 public class APIService {
     public static String API_KEY = "180691ccec03448aa283e97b627c3e00";//227c750bb7714fc39ef1559ef1bd8329
-    public static String BASE_URL = "https://api.nytimes.com";
+    public static String BASE_URL = "https://api.nytimes.com/";
+    public static String BASE_IMAGE="https://www.nytimes.com/";
    // public static String BASE_IMAGES_URL = "http://image.tmdb.org/t/p/";
     //http://image.tmdb.org/t/p/w185/c9XxwwhPHdaImA2f1WEfEsbhaFB.jpg
     private static APIInterface instance = null;
