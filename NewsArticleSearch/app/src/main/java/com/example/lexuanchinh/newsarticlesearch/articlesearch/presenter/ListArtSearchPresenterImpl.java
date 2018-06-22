@@ -29,4 +29,10 @@ public class ListArtSearchPresenterImpl implements ListArtSearchPresenter,DataLi
         mView.showLoading();
         articleSearchData.getDataSearchFromNetwork(this,query);
     }
+
+    @Override
+    public void getSearchFilter(String beginDay, String sort, String newDesk) {
+        mView.showLoading();
+        articleSearchData.getDataSearchFilterFromNetwork(this,beginDay,sort,newDesk);
+    }
 }

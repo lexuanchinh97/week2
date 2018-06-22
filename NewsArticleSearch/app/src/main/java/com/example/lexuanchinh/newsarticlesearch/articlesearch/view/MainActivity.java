@@ -55,6 +55,14 @@ public class MainActivity extends AppCompatActivity implements DatePickerDialog.
         ArticleSearchData searchData=new ArticleSearchDataImpl();
            presenter=new ListArtSearchPresenterImpl(this,searchData);
            presenter.getDocs();
+        Bundle bundle=getIntent().getExtras();
+        if(bundle!=null){
+            String beginDay,sort,newDesks;
+            beginDay=bundle.getString("beginDay");
+            sort=bundle.getString("sort");
+            newDesks=bundle.getString("newDesks");
+            presenter.getSearchFilter(beginDay,sort,newDesks);
+        }
     }
 
     @Override

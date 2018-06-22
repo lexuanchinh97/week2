@@ -4,6 +4,7 @@ import android.app.DatePickerDialog;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -26,7 +27,8 @@ public class FilterActivity extends AppCompatActivity {
     int day,month,year;
     Button btnSave;
     CheckBox chkArt,chkFashion,chkSport;
-    Boolean checkArt,checkFashion,checkSports;
+    String beginDay="01012018",sort="";
+    String newDesk="news_desk:(";
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -34,26 +36,35 @@ public class FilterActivity extends AppCompatActivity {
         AddControls();
         SortOderSpiner();
         datePickerDialog();
-        checkValues();
         btnSave.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-//                if(chkFashion.isChecked())
-//                {
-//                    Toast.makeText(FilterActivity.this, chkFashion.getText().toString(), Toast.LENGTH_SHORT).show();
-//                }
+                if(chkArt.isChecked()){
+                    chkArt.setChecked(true);
+                    Log.d("abc","a");
+                    newDesk+="Arst ";
+                }
+                if(chkFashion.isChecked())
+                {
+                    chkFashion.setChecked(true);
+                    Log.d("abc","b");
+                    newDesk+="Fashion & Style ";
+                }
+                if(chkSport.isChecked()){
+                    chkSport.setChecked(true);
+                    Log.d("abc","c");
+                    newDesk+="Sports";
+                }
+                newDesk+=")";
                 Intent intent=new Intent(FilterActivity.this,MainActivity.class);
+                Log.d("abc",beginDay+sort+newDesk);
+                intent.putExtra("beginDay",beginDay);
+                intent.putExtra("sort",sort);
+                intent.putExtra("newDesks",newDesk);
                 startActivity(intent);
             }
         });
 
-    }
-
-    private void checkValues() {
-        if(chkFashion.isChecked()){
-            chkFashion.setChecked(true);
-            Toast.makeText(this, "abc", Toast.LENGTH_SHORT).show();
-        }
     }
 
     private void SortOderSpiner() {
@@ -68,10 +79,10 @@ public class FilterActivity extends AppCompatActivity {
             public void onItemSelected(AdapterView<?> adapterView, View view, int position, long l) {
                 switch (position){
                     case 0:
-                        Toast.makeText(FilterActivity.this, "newer", Toast.LENGTH_SHORT).show();
+                        sort="newest";
                         break;
                     case 1:
-                        Toast.makeText(FilterActivity.this, "older", Toast.LENGTH_SHORT).show();
+                        sort="oldest";
                         break;
                 }
             }
@@ -105,9 +116,21 @@ public class FilterActivity extends AppCompatActivity {
                 DatePickerDialog datePickerDialog=new DatePickerDialog(FilterActivity.this, new DatePickerDialog.OnDateSetListener() {
                     @Override
                     public void onDateSet(DatePicker datePicker, int year, int monthOfYear, int dateOfMonth) {
+                        beginDay="";
                         monthOfYear+=1;
+                        String a="01",b="01",c="2018";
                         txtBeginDate.setText(dateOfMonth+"/"+monthOfYear+"/"+year);
-                        Toast.makeText(FilterActivity.this, dateOfMonth+"/"+monthOfYear+"/"+year, Toast.LENGTH_SHORT).show();
+                        a=String.valueOf(dateOfMonth);
+                        b=String.valueOf(monthOfYear);
+                        c=String.valueOf(year);
+                        if(dateOfMonth<10){
+                         a="0"+String.valueOf(dateOfMonth);
+                        }
+                        if(monthOfYear<10){
+                            b="0"+String.valueOf(monthOfYear);
+                        }
+
+                        beginDay= a+b+c;
                     }
                 },year,month,day);
                 datePickerDialog.show();

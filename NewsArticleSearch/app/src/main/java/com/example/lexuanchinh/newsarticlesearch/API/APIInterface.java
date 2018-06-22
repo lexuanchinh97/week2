@@ -21,4 +21,10 @@ public interface APIInterface {
           //  @Query("begin_day") String BEGIN_DAY,
          //   @Query("fq") String NEWS_DESK,
             @Query("api-key") String API_KEY);
+    @GET("svc/search/v2/articlesearch.json")
+    Call<ListSearch>getSearchFilter(
+              @Query("begin_day") String BEGIN_DAY,
+              @Query("sort") String SORT,
+              @Query("fq") String NEWS_DESK,
+            @Query("api-key") String API_KEY);
 }

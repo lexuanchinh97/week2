@@ -61,5 +61,24 @@ public class ArticleSearchDataImpl implements ArticleSearchData {
         });
     }
 
+    @Override
+    public void getDataSearchFilterFromNetwork(final DataListener listener, String beginDat, String sort, String newDesk) {
+        APIService.getInstance().getSearchFilter(beginDat,sort,newDesk,APIService.API_KEY).enqueue(new Callback<ListSearch>() {
+            @Override
+            public void onResponse(Call<ListSearch> call, Response<ListSearch> response) {
+                if(response.body()!=null){
+                    listSearch=response.body();
+                    docList=listSearch.getResponse().getDocs();
+                    listener.onResponse(docList);
+                }
+            }
+
+            @Override
+            public void onFailure(Call<ListSearch> call, Throwable t) {
+
+            }
+        });
+    }
+
 
 }
