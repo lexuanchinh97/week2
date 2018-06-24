@@ -16,15 +16,24 @@ public interface APIInterface {
                                      @Query("api-key") String API_KEY,
                                      @Query("page") int PAGE);
     @GET("svc/search/v2/articlesearch.json")
+
     Call<ListSearch>getArticlesearchQ(
-            @Query("q") String Q,
-          //  @Query("begin_day") String BEGIN_DAY,
-         //   @Query("fq") String NEWS_DESK,
-            @Query("api-key") String API_KEY);
+                                      @Query("q") String Q,
+                                      @Query("api-key") String API_KEY);
+
     @GET("svc/search/v2/articlesearch.json")
     Call<ListSearch>getSearchFilter(
-              @Query("begin_day") String BEGIN_DAY,
-              @Query("sort") String SORT,
-              @Query("fq") String NEWS_DESK,
-            @Query("api-key") String API_KEY);
+                                      @Query("begin_day") String BEGIN_DAY,
+                                      @Query("sort") String SORT,
+                                      @Query("fq") String NEWS_DESK,
+                                      @Query("api-key") String API_KEY);
+
+    @GET("svc/search/v2/articlesearch.json")
+    Call<ListSearch>getLoadMore(
+                                      @Query("begin_day") String BEGIN_DAY,
+                                      @Query("sort") String SORT,
+                                      @Query("q") String Q,
+                                      @Query("fq") String NEWS_DESK,
+                                      @Query("api-key") String API_KEY,
+                                      @Query("page") int PAGE);
 }

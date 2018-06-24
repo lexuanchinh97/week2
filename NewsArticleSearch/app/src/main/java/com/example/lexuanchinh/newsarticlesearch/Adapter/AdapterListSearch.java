@@ -16,12 +16,14 @@ import com.example.lexuanchinh.newsarticlesearch.R;
 import com.example.lexuanchinh.newsarticlesearch.model.Doc;
 import com.example.lexuanchinh.newsarticlesearch.model.ListSearch;
 import com.example.lexuanchinh.newsarticlesearch.util.APIService;
+import com.squareup.picasso.Picasso;
 
 import java.util.List;
 
 public class AdapterListSearch extends RecyclerView.Adapter<AdapterListSearch.ViewHolder> {
     List<Doc> data;
     Context context;
+    private IClickListener listener;
     public AdapterListSearch(Context ctx) {
         this.context = ctx;
     }
@@ -29,7 +31,9 @@ public class AdapterListSearch extends RecyclerView.Adapter<AdapterListSearch.Vi
         this.data = data;
         notifyDataSetChanged();
     }
-
+    public void setListener(IClickListener listener) {
+        this.listener = listener;
+    }
     @NonNull
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
@@ -43,9 +47,11 @@ public class AdapterListSearch extends RecyclerView.Adapter<AdapterListSearch.Vi
         if(doc!=null){
             viewHolder.txtMain.setText( doc.getHeadline().getMain());
             if(doc.getMultimedia().size()>0){
-            //    Log.d("abc",APIService.BASE_URL+doc.getMultimedia().get(0).getUrl());
-                Glide.with(context).load(APIService.BASE_IMAGE+doc.getMultimedia().get(0).getUrl())
-                        .into(viewHolder.thumb_image);
+//                Glide.with(context).load(APIService.BASE_IMAGE+doc.getMultimedia().get(0).getUrl())
+//                        .into(viewHolder.thumb_image);
+                Picasso.with(context).load(APIService.BASE_IMAGE+doc.getMultimedia().get(0).getUrl())
+                                    .into(viewHolder.thumb_image);
+
             }
             else{
                 Glide.with(context).load("https://images-na.ssl-images-amazon.com/images/I/51lbBitzv-L._SX342_QL70_.jpg")
@@ -58,8 +64,12 @@ public class AdapterListSearch extends RecyclerView.Adapter<AdapterListSearch.Vi
     public int getItemCount() {
         return data.size();
     }
+    public interface IClickListener {
+        void onItemClick(Doc docs);
+    }
 
-    public class ViewHolder extends RecyclerView.ViewHolder {
+
+    public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
         public TextView txtMain;
        public ImageView thumb_image;
 
@@ -68,7 +78,12 @@ public class AdapterListSearch extends RecyclerView.Adapter<AdapterListSearch.Vi
             super(itemView);
             txtMain=itemView.findViewById(R.id.txtMain);
             thumb_image=itemView.findViewById(R.id.img_Thumbnail);
+            itemView.setOnClickListener(this);
         }
 
+        @Override
+        public void onClick(View view) {
+            listener.onItemClick(data.get(getAdapterPosition()));
+        }
     }
     }

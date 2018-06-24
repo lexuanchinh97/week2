@@ -1,17 +1,24 @@
 package com.example.lexuanchinh.newsarticlesearch.articlesearch.view;
-
 import android.app.DatePickerDialog;
+import android.app.PendingIntent;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.net.Uri;
+import android.support.annotation.NonNull;
+import android.support.customtabs.CustomTabsIntent;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.view.MenuItemCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SearchView;
-import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.DatePicker;
+import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import com.example.lexuanchinh.newsarticlesearch.Adapter.AdapterListSearch;
@@ -22,48 +29,77 @@ import com.example.lexuanchinh.newsarticlesearch.articlesearch.presenter.ListArt
 import com.example.lexuanchinh.newsarticlesearch.articlesearch.presenter.ListArtSearchPresenterImpl;
 import com.example.lexuanchinh.newsarticlesearch.model.Doc;
 import com.example.lexuanchinh.newsarticlesearch.util.APIService;
+import com.example.lexuanchinh.newsarticlesearch.util.NetWorkUtil;
 
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 
-import static com.example.lexuanchinh.newsarticlesearch.articlesearch.model.ArticleSearchDataImpl.beginDay;
-import static com.example.lexuanchinh.newsarticlesearch.articlesearch.model.ArticleSearchDataImpl.newsDesk;
-import static com.example.lexuanchinh.newsarticlesearch.articlesearch.model.ArticleSearchDataImpl.page;
-import static com.example.lexuanchinh.newsarticlesearch.articlesearch.model.ArticleSearchDataImpl.sort;
+import butterknife.BindView;
+import butterknife.ButterKnife;
 
 
 public class MainActivity extends AppCompatActivity implements DatePickerDialog.OnDateSetListener,ListArtSearchView  {
     List<Doc> docList;
-    RecyclerView recyclerView;
+   // RecyclerView recyclerView;
     AdapterListSearch adapter;
     ListArtSearchPresenter presenter;
+    String beginDay="20160112",sort="newest",newDesks="",q="";
+    int page=1;
+    boolean isLoading=true;
+    int pastVisibleItem,visibleItemCount,totalItemCount,previous_total=0;
+    int viewThreshold=10;
+    GridLayoutManager layoutManager;
+ //   ProgressBar progressBar;
+    @BindView(R.id.recyclerview) RecyclerView recyclerView;
+    @BindView(R.id.progressBar) ProgressBar progressBar;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        recyclerView=findViewById(R.id.recyclerview);
+        NetWorkUtil.setContext(this);
+      //  recyclerView=findViewById(R.id.recyclerview);
+     //   progressBar=findViewById(R.id.progressBar);
 
-//           if(docList==null)
-//           {
-//               setUpListView();
-//              // callAPI();
-//           }else {
-//               adapter.setData(docList);
-//           }
+        ButterKnife.bind(this);
+
         setUpListView();
         ArticleSearchData searchData=new ArticleSearchDataImpl();
-           presenter=new ListArtSearchPresenterImpl(this,searchData);
-           presenter.getDocs();
+        presenter=new ListArtSearchPresenterImpl(this,searchData);
+        presenter.getDocs(page);
+
         Bundle bundle=getIntent().getExtras();
         if(bundle!=null){
-            String beginDay,sort,newDesks;
+
             beginDay=bundle.getString("beginDay");
             sort=bundle.getString("sort");
             newDesks=bundle.getString("newDesks");
+            page=1;
             presenter.getSearchFilter(beginDay,sort,newDesks);
         }
+        recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
+            @Override
+            public void onScrolled(@NonNull RecyclerView recyclerView, int dx, int dy) {
+                super.onScrolled(recyclerView, dx, dy);
+                visibleItemCount=layoutManager.getChildCount();
+                totalItemCount=layoutManager.getItemCount();
+                pastVisibleItem=layoutManager.findFirstVisibleItemPosition();
+                if(dy>0){
+                    if(isLoading){
+                            isLoading=false;
+                            previous_total=totalItemCount;
+                    }
+                    if(!isLoading && (totalItemCount-visibleItemCount)<=(pastVisibleItem+viewThreshold)){
+                        page++;
+                        Toast.makeText(MainActivity.this, "page="+page, Toast.LENGTH_SHORT).show();
+                        isLoading=true;
+                        presenter.getLoadMore(beginDay,sort,q,newDesks, APIService.API_KEY,page);
+                    }
+                }
+            }
+        });
     }
+
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -74,7 +110,9 @@ public class MainActivity extends AppCompatActivity implements DatePickerDialog.
             @Override
             public boolean onQueryTextSubmit(String s) {
                 Toast.makeText(MainActivity.this, s, Toast.LENGTH_SHORT).show();
-                presenter.getSearch(s);
+                q=s;
+                page=1;
+                presenter.getSearch(q);
                 return  true;
             }
 
@@ -106,27 +144,6 @@ public class MainActivity extends AppCompatActivity implements DatePickerDialog.
         }
         return super.onOptionsItemSelected(item);
     }
-//    private void callAPI() {
-//        //    progressBar.setVisibility(View.VISIBLE);
-//        APIService.getInstance().getArticlesearch("20170112","newest","news_desk:( Sports)",APIService.API_KEY,page++).enqueue(new Callback<ListSearch>() {
-//            @Override
-//            public void onResponse(Call<ListSearch> call, Response<ListSearch> response) {
-//                if(response.body()!=null){
-//                    listSearch=response.body();
-//                    docList=listSearch.getResponse().getDocs();
-//                    adapter.setData(docList);
-//                    //  Toast.makeText(MainActivity.this, response.body().getCopyright(), Toast.LENGTH_SHORT).show();
-//                }
-//            }
-//            @Override
-//            public void onFailure(Call<ListSearch> call, Throwable t) {
-//
-//            }
-//        });
-//
-//
-//    }
-
 
     @Override
     public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
@@ -140,22 +157,43 @@ public class MainActivity extends AppCompatActivity implements DatePickerDialog.
         docList = new ArrayList<>();
         // recyclerView.setHasFixedSize(true);
         // use a linear layout manager
-        RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(this);
-        recyclerView.setLayoutManager(mLayoutManager);
+    //    RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(this);
+        layoutManager=new GridLayoutManager(this,2);
+        recyclerView.setLayoutManager(layoutManager);
 
         adapter = new AdapterListSearch(MainActivity.this);
         adapter.setData(docList);
         this.recyclerView.setAdapter(adapter);
-        this.recyclerView.setLayoutManager(new StaggeredGridLayoutManager(2,StaggeredGridLayoutManager.VERTICAL));
-        //this.recyclerView.addOnScrollListener(n);
+        adapter.setListener(new AdapterListSearch.IClickListener() {
+            @Override
+            public void onItemClick(Doc docs) {
+              //  Toast.makeText(MainActivity.this, docs.getHeadline().getMain(), Toast.LENGTH_SHORT).show();
+                CustomTabsIntent.Builder builder = new CustomTabsIntent.Builder();
+                // set toolbar color and/or setting custom actions before invoking build()
+                // Once ready, call CustomTabsIntent.Builder.build() to create a CustomTabsIntent
+                CustomTabsIntent customTabsIntent = builder.build();
+                // and launch the desired Url with CustomTabsIntent.launchUrl()
+                builder.setToolbarColor(ContextCompat.getColor(MainActivity.this, R.color.colorAccent));
+                customTabsIntent.launchUrl(MainActivity.this, Uri.parse(docs.getWebUrl()));
+            }
+        });
+//        this.recyclerView.setLayoutManager(new StaggeredGridLayoutManager(2,StaggeredGridLayoutManager.VERTICAL));
     }
 
     @Override
     public void showLoading() {
+        progressBar.setVisibility(View.VISIBLE);
     }
 
     @Override
     public void showListArtSearch(List<Doc> docs) {
             adapter.setData(docs);
+    }
+
+    @Override
+    public void hideLoading() {
+        if (progressBar.isShown()) {
+            progressBar.setVisibility(View.GONE);
+        }
     }
 }

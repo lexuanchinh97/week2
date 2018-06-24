@@ -16,21 +16,15 @@ import retrofit2.Response;
 public class ArticleSearchDataImpl implements ArticleSearchData {
     ListSearch listSearch;
     List<Doc> docList;
-    public static int page=1;
-    public static String beginDay="20170112";
-    public static String sort="newest";
-    public static String newsDesk="";
     @Override
-    public void getDataFormNetwork(final DataListener listener) {
-        APIService.getInstance().getArticlesearch(beginDay,sort,APIService.API_KEY,page).enqueue(new Callback<ListSearch>() {
+    public void getDataFormNetwork(final DataListener listener,int page) {
+        APIService.getInstance().getArticlesearch("20170112","newest",APIService.API_KEY,page).enqueue(new Callback<ListSearch>() {
             @Override
             public void onResponse(Call<ListSearch> call, Response<ListSearch> response) {
                 if(response.body()!=null){
                     listSearch=response.body();
                     docList=listSearch.getResponse().getDocs();
                     listener.onResponse(docList);
-                   // adapter.setData(docList);
-                    //  Toast.makeText(MainActivity.this, response.body().getCopyright(), Toast.LENGTH_SHORT).show();
                 }
             }
             @Override
@@ -49,11 +43,8 @@ public class ArticleSearchDataImpl implements ArticleSearchData {
                     listSearch=response.body();
                     docList=listSearch.getResponse().getDocs();
                     listener.onResponse(docList);
-                    // adapter.setData(docList);
-                    //  Toast.makeText(MainActivity.this, response.body().getCopyright(), Toast.LENGTH_SHORT).show();
                 }
             }
-
             @Override
             public void onFailure(Call<ListSearch> call, Throwable t) {
                 Log.d("aaa","chinh");
@@ -73,6 +64,24 @@ public class ArticleSearchDataImpl implements ArticleSearchData {
                 }
             }
 
+            @Override
+            public void onFailure(Call<ListSearch> call, Throwable t) {
+
+            }
+        });
+    }
+
+    @Override
+    public void getDataLoadMoreFromNetWork(final DataListener listener, String beginDay, String sort, String q, String newDesks, String API_KEY, int page) {
+        APIService.getInstance().getLoadMore(beginDay,sort,q,newDesks,APIService.API_KEY,page).enqueue(new Callback<ListSearch>() {
+            @Override
+            public void onResponse(Call<ListSearch> call, Response<ListSearch> response) {
+                if(response.body()!=null){
+                    listSearch=response.body();
+                    docList=listSearch.getResponse().getDocs();
+                    listener.onResponse(docList);
+                }
+            }
             @Override
             public void onFailure(Call<ListSearch> call, Throwable t) {
 
