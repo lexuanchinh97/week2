@@ -22,6 +22,7 @@ import java.util.Calendar;
 import java.util.List;
 
 import butterknife.BindView;
+import butterknife.ButterKnife;
 
 public class FilterActivity extends AppCompatActivity {
     @BindView(R.id.spinner) Spinner spinner;
@@ -37,7 +38,7 @@ public class FilterActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_filter);
-
+         ButterKnife.bind(this);
         SortOderSpiner();
         datePickerDialog();
         btnSave.setOnClickListener(new View.OnClickListener() {
@@ -70,7 +71,6 @@ public class FilterActivity extends AppCompatActivity {
         });
 
     }
-
     private void SortOderSpiner() {
         List<String> list=new ArrayList<>();
         list.add("Newest");

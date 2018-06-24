@@ -15,13 +15,14 @@ import retrofit2.Response;
 
 public class ArticleSearchDataImpl implements ArticleSearchData {
     ListSearch listSearch;
-    List<Doc> docList;
+    public static List<Doc> docList=null;
     @Override
     public void getDataFormNetwork(final DataListener listener,int page) {
         APIService.getInstance().getArticlesearch("20170112","newest",APIService.API_KEY,page).enqueue(new Callback<ListSearch>() {
             @Override
             public void onResponse(Call<ListSearch> call, Response<ListSearch> response) {
-                if(response.body()!=null){
+                if(response!=null && response.body()!=null){
+                    docList=null;
                     listSearch=response.body();
                     docList=listSearch.getResponse().getDocs();
                     listener.onResponse(docList);
@@ -29,17 +30,16 @@ public class ArticleSearchDataImpl implements ArticleSearchData {
             }
             @Override
             public void onFailure(Call<ListSearch> call, Throwable t) {
-
             }
         });
     }
-
     @Override
     public void getDataSearchFromNetwork(final DataListener listener, String query) {
         APIService.getInstance().getArticlesearchQ(query,APIService.API_KEY).enqueue(new Callback<ListSearch>() {
             @Override
             public void onResponse(Call<ListSearch> call, Response<ListSearch> response) {
-                if(response.body()!=null){
+                if(response!=null && response.body()!=null){
+                    docList=null;
                     listSearch=response.body();
                     docList=listSearch.getResponse().getDocs();
                     listener.onResponse(docList);
@@ -57,7 +57,8 @@ public class ArticleSearchDataImpl implements ArticleSearchData {
         APIService.getInstance().getSearchFilter(beginDat,sort,newDesk,APIService.API_KEY).enqueue(new Callback<ListSearch>() {
             @Override
             public void onResponse(Call<ListSearch> call, Response<ListSearch> response) {
-                if(response.body()!=null){
+                if(response!=null && response.body()!=null){
+                    docList=null;
                     listSearch=response.body();
                     docList=listSearch.getResponse().getDocs();
                     listener.onResponse(docList);
@@ -76,9 +77,14 @@ public class ArticleSearchDataImpl implements ArticleSearchData {
         APIService.getInstance().getLoadMore(beginDay,sort,q,newDesks,APIService.API_KEY,page).enqueue(new Callback<ListSearch>() {
             @Override
             public void onResponse(Call<ListSearch> call, Response<ListSearch> response) {
-                if(response.body()!=null){
-                    listSearch=response.body();
-                    docList=listSearch.getResponse().getDocs();
+                if(response!=null && response.body()!=null){
+                    if(docList==null){
+                        listSearch=response.body();
+                        docList=listSearch.getResponse().getDocs();
+                    }
+                    else {
+                        docList.addAll(response.body().getResponse().getDocs());
+                    }
                     listener.onResponse(docList);
                 }
             }

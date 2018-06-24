@@ -3,6 +3,7 @@ package com.example.lexuanchinh.newsarticlesearch.model;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
+
 public class ListSearch {
     @SerializedName("status")
     @Expose

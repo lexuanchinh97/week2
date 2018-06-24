@@ -43,9 +43,9 @@ import butterknife.ButterKnife;
 
 public class MainActivity extends AppCompatActivity implements DatePickerDialog.OnDateSetListener,ListArtSearchView  {
     List<Doc> docList;
-
     AdapterListSearch adapter;
     ListArtSearchPresenter presenter;
+    int requestCode = 100;
     String beginDay="20160112",sort="newest",newDesks="",q="";
     int page=1;
     boolean isLoading=true;
@@ -176,10 +176,22 @@ public class MainActivity extends AppCompatActivity implements DatePickerDialog.
                 CustomTabsIntent.Builder builder = new CustomTabsIntent.Builder();
                 // set toolbar color and/or setting custom actions before invoking build()
                 // Once ready, call CustomTabsIntent.Builder.build() to create a CustomTabsIntent
+                builder.setToolbarColor(ContextCompat.getColor(MainActivity.this, R.color.colorAccent));
+                Intent intent = new Intent(Intent.ACTION_SEND);
+                intent.setType("text/plain");
+                intent.putExtra(Intent.EXTRA_TEXT, docs.getWebUrl());
+                PendingIntent pendingIntent = PendingIntent.getActivity(MainActivity.this,
+                        requestCode,
+                        intent,
+                        PendingIntent.FLAG_UPDATE_CURRENT);
+                Bitmap bitmap = BitmapFactory.decodeResource(getResources(), R.drawable.share);
+                builder.setActionButton(bitmap, "Share Link", pendingIntent, true);
                 CustomTabsIntent customTabsIntent = builder.build();
                 // and launch the desired Url with CustomTabsIntent.launchUrl()
-                builder.setToolbarColor(ContextCompat.getColor(MainActivity.this, R.color.colorAccent));
                 customTabsIntent.launchUrl(MainActivity.this, Uri.parse(docs.getWebUrl()));
+                    // add share action to menu list
+               // builder.addMenuItem()
+
             }
         });
 //        this.recyclerView.setLayoutManager(new StaggeredGridLayoutManager(2,StaggeredGridLayoutManager.VERTICAL));
