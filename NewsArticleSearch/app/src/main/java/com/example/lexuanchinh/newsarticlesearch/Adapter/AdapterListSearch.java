@@ -20,6 +20,9 @@ import com.squareup.picasso.Picasso;
 
 import java.util.List;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
+
 public class AdapterListSearch extends RecyclerView.Adapter<AdapterListSearch.ViewHolder> {
     List<Doc> data;
     Context context;
@@ -67,17 +70,17 @@ public class AdapterListSearch extends RecyclerView.Adapter<AdapterListSearch.Vi
     public interface IClickListener {
         void onItemClick(Doc docs);
     }
-
-
     public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
-        public TextView txtMain;
-       public ImageView thumb_image;
-
+//        public TextView txtMain;
+//       public ImageView thumb_image;
+        @BindView(R.id.txtMain) TextView txtMain;
+        @BindView(R.id.img_Thumbnail) ImageView thumb_image;
         public ViewHolder(View itemView) {
 
             super(itemView);
-            txtMain=itemView.findViewById(R.id.txtMain);
-            thumb_image=itemView.findViewById(R.id.img_Thumbnail);
+            ButterKnife.bind(this,itemView);
+//            txtMain=itemView.findViewById(R.id.txtMain);
+//            thumb_image=itemView.findViewById(R.id.img_Thumbnail);
             itemView.setOnClickListener(this);
         }
 

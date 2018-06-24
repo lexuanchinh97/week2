@@ -21,19 +21,23 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 
+import butterknife.BindView;
+
 public class FilterActivity extends AppCompatActivity {
-    Spinner spinner;
-    TextView txtBeginDate;
+    @BindView(R.id.spinner) Spinner spinner;
+    @BindView(R.id.txtBeginDay) TextView txtBeginDate;
+    @BindView(R.id.btnSave) Button btnSave;
+    @BindView(R.id.chkArt) CheckBox chkArt;
+    @BindView(R.id.chkFashion) CheckBox chkFashion;
+    @BindView(R.id.chkSports) CheckBox chkSport;
     int day,month,year;
-    Button btnSave;
-    CheckBox chkArt,chkFashion,chkSport;
     String beginDay="01012018",sort="";
     String newDesk="news_desk:(";
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_filter);
-        AddControls();
+
         SortOderSpiner();
         datePickerDialog();
         btnSave.setOnClickListener(new View.OnClickListener() {
@@ -94,16 +98,6 @@ public class FilterActivity extends AppCompatActivity {
         });
 
     }
-
-    private void AddControls() {
-        spinner=findViewById(R.id.spinner);
-        txtBeginDate=findViewById(R.id.txtBeginDay);
-        btnSave=findViewById(R.id.btnSave);
-        chkArt=findViewById(R.id.chkArt);
-        chkFashion=findViewById(R.id.chkFashion);
-        chkSport=findViewById(R.id.chkSports);
-    }
-
     void datePickerDialog(){
          Calendar c=Calendar.getInstance();
          year=c.get(Calendar.YEAR);

@@ -2,6 +2,7 @@ package com.example.lexuanchinh.newsarticlesearch.articlesearch.view;
 import android.app.DatePickerDialog;
 import android.app.PendingIntent;
 import android.content.Intent;
+import android.databinding.DataBindingUtil;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
@@ -27,6 +28,7 @@ import com.example.lexuanchinh.newsarticlesearch.articlesearch.model.ArticleSear
 import com.example.lexuanchinh.newsarticlesearch.articlesearch.model.ArticleSearchDataImpl;
 import com.example.lexuanchinh.newsarticlesearch.articlesearch.presenter.ListArtSearchPresenter;
 import com.example.lexuanchinh.newsarticlesearch.articlesearch.presenter.ListArtSearchPresenterImpl;
+import com.example.lexuanchinh.newsarticlesearch.databinding.ActivityMainBinding;
 import com.example.lexuanchinh.newsarticlesearch.model.Doc;
 import com.example.lexuanchinh.newsarticlesearch.util.APIService;
 import com.example.lexuanchinh.newsarticlesearch.util.NetWorkUtil;
@@ -41,7 +43,7 @@ import butterknife.ButterKnife;
 
 public class MainActivity extends AppCompatActivity implements DatePickerDialog.OnDateSetListener,ListArtSearchView  {
     List<Doc> docList;
-   // RecyclerView recyclerView;
+
     AdapterListSearch adapter;
     ListArtSearchPresenter presenter;
     String beginDay="20160112",sort="newest",newDesks="",q="";
@@ -50,9 +52,11 @@ public class MainActivity extends AppCompatActivity implements DatePickerDialog.
     int pastVisibleItem,visibleItemCount,totalItemCount,previous_total=0;
     int viewThreshold=10;
     GridLayoutManager layoutManager;
- //   ProgressBar progressBar;
-    @BindView(R.id.recyclerview) RecyclerView recyclerView;
-    @BindView(R.id.progressBar) ProgressBar progressBar;
+    ProgressBar progressBar;
+    RecyclerView recyclerView;
+//    @BindView(R.id.recyclerview) RecyclerView recyclerView;
+//    @BindView(R.id.progressBar) ProgressBar progressBar;
+    ActivityMainBinding binding;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -60,9 +64,10 @@ public class MainActivity extends AppCompatActivity implements DatePickerDialog.
         NetWorkUtil.setContext(this);
       //  recyclerView=findViewById(R.id.recyclerview);
      //   progressBar=findViewById(R.id.progressBar);
-
-        ButterKnife.bind(this);
-
+       // ButterKnife.bind(this);
+        binding= DataBindingUtil.setContentView(this,R.layout.activity_main);
+        recyclerView=binding.recyclerview;
+        progressBar=binding.progressBar;
         setUpListView();
         ArticleSearchData searchData=new ArticleSearchDataImpl();
         presenter=new ListArtSearchPresenterImpl(this,searchData);
