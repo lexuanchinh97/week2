@@ -87,15 +87,32 @@
         </LinearLayout>
     </LinearLayout>
 
-    <Button
-
-        android:id="@+id/btnSave"
-        android:layout_marginTop="50dp"
-        android:textColor="#0800ff"
-        android:background="@drawable/background_button"
-        android:layout_gravity="center"
-        android:layout_width="wrap_content"
+    <LinearLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Save" />
+        android:layout_marginTop="30dp"
+        android:orientation="horizontal"
+        android:padding="10dp">
+
+        <Button
+            android:id="@+id/btnExit"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:layout_marginRight="20dp"
+            android:background="@drawable/background_button"
+            android:text="Exit"
+            android:textColor="#ffffff" />
+
+        <Button
+            android:id="@+id/btnSave"
+            android:layout_marginLeft="20dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:background="@drawable/background_button"
+            android:text="Save"
+            android:textColor="#ffffff" />
+    </LinearLayout>
 
 </LinearLayout>

@@ -57,7 +57,7 @@ public class AdapterListSearch extends RecyclerView.Adapter<AdapterListSearch.Vi
 
             }
             else{
-                Glide.with(context).load("https://images-na.ssl-images-amazon.com/images/I/51lbBitzv-L._SX342_QL70_.jpg")
+                Glide.with(context).load("http://icons.iconarchive.com/icons/martz90/circle-addon1/512/new-york-times-icon.png")
                         .into(viewHolder.thumb_image);
             }
         }

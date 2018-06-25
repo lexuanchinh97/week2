@@ -17,6 +17,7 @@
 
         <ImageView
             android:id="@+id/img_Thumbnail"
+            android:layout_marginTop="10dp"
             android:layout_width="match_parent"
             android:layout_height="130dp"
             android:adjustViewBounds="true"

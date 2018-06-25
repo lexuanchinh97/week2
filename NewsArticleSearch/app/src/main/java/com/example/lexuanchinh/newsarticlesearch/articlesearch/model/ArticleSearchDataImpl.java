@@ -18,7 +18,7 @@ public class ArticleSearchDataImpl implements ArticleSearchData {
     public static List<Doc> docList=null;
     @Override
     public void getDataFormNetwork(final DataListener listener,int page) {
-        APIService.getInstance().getArticlesearch("20170112","newest",APIService.API_KEY,page).enqueue(new Callback<ListSearch>() {
+        APIService.getInstance().getArticlesearch("","newest",APIService.API_KEY,page).enqueue(new Callback<ListSearch>() {
             @Override
             public void onResponse(Call<ListSearch> call, Response<ListSearch> response) {
                 if(response!=null && response.body()!=null){

@@ -40,8 +40,11 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
+import static com.example.lexuanchinh.newsarticlesearch.util.NetWorkUtil.isOnline;
+
 
 public class MainActivity extends AppCompatActivity implements DatePickerDialog.OnDateSetListener,ListArtSearchView  {
+    NetWorkUtil netWorkUtil;
     List<Doc> docList;
     AdapterListSearch adapter;
     ListArtSearchPresenter presenter;
@@ -72,7 +75,6 @@ public class MainActivity extends AppCompatActivity implements DatePickerDialog.
         ArticleSearchData searchData=new ArticleSearchDataImpl();
         presenter=new ListArtSearchPresenterImpl(this,searchData);
         presenter.getDocs(page);
-
         Bundle bundle=getIntent().getExtras();
         if(bundle!=null){
 
@@ -96,7 +98,6 @@ public class MainActivity extends AppCompatActivity implements DatePickerDialog.
                     }
                     if(!isLoading && (totalItemCount-visibleItemCount)<=(pastVisibleItem+viewThreshold)){
                         page++;
-                        Toast.makeText(MainActivity.this, "page="+page, Toast.LENGTH_SHORT).show();
                         isLoading=true;
                         presenter.getLoadMore(beginDay,sort,q,newDesks, APIService.API_KEY,page);
                     }
@@ -114,7 +115,7 @@ public class MainActivity extends AppCompatActivity implements DatePickerDialog.
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String s) {
-                Toast.makeText(MainActivity.this, s, Toast.LENGTH_SHORT).show();
+             //   Toast.makeText(MainActivity.this, s, Toast.LENGTH_SHORT).show();
                 q=s;
                 page=1;
                 presenter.getSearch(q);
@@ -139,13 +140,12 @@ public class MainActivity extends AppCompatActivity implements DatePickerDialog.
                 Intent intent=new Intent(MainActivity.this,FilterActivity.class);
                 startActivity(intent);
                 break;
-            case R.id.profile:
-                Toast.makeText(this, "profile", Toast.LENGTH_SHORT).show();
-                break;
-            case R.id.exit:
-                Toast.makeText(this, "exit", Toast.LENGTH_SHORT).show();
-                break;
-
+//            case R.id.profile:
+//                Toast.makeText(this, "profile", Toast.LENGTH_SHORT).show();
+//                break;
+//            case R.id.exit:
+//                Toast.makeText(this, "exit", Toast.LENGTH_SHORT).show();
+//                break;
         }
         return super.onOptionsItemSelected(item);
     }

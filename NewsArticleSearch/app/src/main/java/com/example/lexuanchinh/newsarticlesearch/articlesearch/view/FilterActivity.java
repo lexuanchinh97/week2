@@ -28,6 +28,7 @@ public class FilterActivity extends AppCompatActivity {
     @BindView(R.id.spinner) Spinner spinner;
     @BindView(R.id.txtBeginDay) TextView txtBeginDate;
     @BindView(R.id.btnSave) Button btnSave;
+    @BindView(R.id.btnExit) Button btnExit;
     @BindView(R.id.chkArt) CheckBox chkArt;
     @BindView(R.id.chkFashion) CheckBox chkFashion;
     @BindView(R.id.chkSports) CheckBox chkSport;
@@ -41,6 +42,13 @@ public class FilterActivity extends AppCompatActivity {
          ButterKnife.bind(this);
         SortOderSpiner();
         datePickerDialog();
+        btnExit.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent=new Intent(FilterActivity.this,MainActivity.class);
+                startActivity(intent);
+            }
+        });
         btnSave.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
