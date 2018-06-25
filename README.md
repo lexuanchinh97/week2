@@ -41,7 +41,6 @@ The following **bonus** features are implemented:
 The following **additional** features are implemented:
 
 ## Video Walkthrough
-
 Here's a walkthrough of implemented user stories:
 
 <img src='https://imgur.com/a/aI0Gxmo.gif' title='NYtimes Network Error' width='' alt='Video Walkthrough' />
