@@ -43,7 +43,7 @@ The following **additional** features are implemented:
 ## Video Walkthrough
 Here's a walkthrough of implemented user stories:
 
-<img src='https://imgur.com/a/aI0Gxmo.gif' title='NYtimes Network Error' width='' alt='Video Walkthrough' />
+<img src='https://imgur.com/a/ZQtFawZ.gif' title='NYtimes Network Error' width='' alt='Video Walkthrough' />
 
 GIF created with [LiceCap](http://www.cockos.com/licecap/).
 
